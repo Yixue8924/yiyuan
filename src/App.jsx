@@ -1,19 +1,23 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
-// Component Imports
+// --- 1. Eager Loading (Critical for First Meaningful Paint) ---
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
-import ServicesSection from './components/ServicesSection'
-import AboutSection from './components/AboutSection'
-import ProjectsSection from './components/ProjectsSection'
-import PartnersSection from './components/PartnersSection'
-import Footer from './components/Footer'
-import BackToTop from './components/BackToTop'
-import CookieConsent from './components/CookieConsent'
+
+// --- 2. Lazy Loading (Loaded only as needed to improve PageSpeed) ---
+const AboutSection = lazy(() => import('./components/AboutSection'))
+const ServicesSection = lazy(() => import('./components/ServicesSection'))
+const ProjectsSection = lazy(() => import('./components/ProjectsSection'))
+const PartnersSection = lazy(() => import('./components/PartnersSection'))
+const Footer = lazy(() => import('./components/Footer'))
+const BackToTop = lazy(() => import('./components/BackToTop'))
+const CookieConsent = lazy(() => import('./components/CookieConsent'))
+
+// Loading placeholder for layout stability
+const SectionLoader = () => <div className="h-20 bg-transparent" />
 
 function App() {
-  // Update this to your official domain when you have it
   const siteUrl = "https://yixue8924.github.io/" 
 
   return (
@@ -21,23 +25,19 @@ function App() {
       <div className="w-full bg-white overflow-x-hidden relative">
         {/* --- SEO & Meta Tags --- */}
         <Helmet>
-          {/* 1. Basic Meta Tags */}
           <title>邑沅有限公司 | 專業環境教育與永續發展顧問</title>
           <meta name="description" content="邑沅有限公司致力於環境教育與永續發展，提供ESG顧問諮詢、環教課程開發、環教設施場所申辦及多媒體製作服務。與您共同建立綠色永續未來。" />
           <meta name="keywords" content="邑沅, 邑沅有限公司, 環境教育, 永續發展, ESG顧問, 台北環境教育, 永續經營, 環教場域申辦" />
           <meta name="author" content="邑沅有限公司" />
 
-          {/* 2. Open Graph (For Social Media Previews: Line, FB) */}
           <meta property="og:type" content="website" />
           <meta property="og:url" content={siteUrl} />
           <meta property="og:title" content="邑沅有限公司 - 專業環境教育與永續發展顧問" />
           <meta property="og:description" content="深耕環境教育，提供客製化永續顧問服務。點擊了解更多邑沅的成功案例。" />
           <meta property="og:image" content={`${siteUrl}/og-image.jpg`} />
 
-          {/* 3. Canonical Link */}
           <link rel="canonical" href={siteUrl} />
 
-          {/* 4. Structured Data (JSON-LD) for Google Knowledge Graph */}
           <script type="application/ld+json">
             {`
               {
@@ -69,18 +69,23 @@ function App() {
         <Navbar />
         
         <main>
+          {/* Hero section is rendered immediately to satisfy LCP */}
           <HeroSection />
-          <AboutSection />
-          <ServicesSection />
-          <ProjectsSection />
-          <PartnersSection />
+
+          {/* Wrap non-critical sections in Suspense to split the JS bundle */}
+          <Suspense fallback={<SectionLoader />}>
+            <AboutSection />
+            <ServicesSection />
+            <ProjectsSection />
+            <PartnersSection />
+          </Suspense>
         </main>
 
-        <Footer />
-
-        {/* --- Global Interactive Components --- */}
-        <BackToTop />
-        <CookieConsent />
+        <Suspense fallback={null}>
+          <Footer />
+          <BackToTop />
+          <CookieConsent />
+        </Suspense>
       </div>
     </HelmetProvider>
   )
