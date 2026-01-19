@@ -160,18 +160,14 @@ export default function Footer() {
           className="flex flex-col md:flex-row justify-between items-center gap-6 text-gray-300 text-sm"
         >
           <p>© {currentYear} 邑沅有限公司．版權所有。</p>
+          <p className="text-gray-400 text-xs leading-relaxed">
+            本網站所有內容的著作權等智慧財產權，均為邑沅有限公司所有。本網站內容僅供參考，若有任何疑問，請直接與我們聯絡。
+          </p>
           <div className="flex gap-6">
             <button onClick={() => setActivePolicy(POLICIES.privacy)} className="hover:text-white transition-colors">隱私政策</button>
             <button onClick={() => setActivePolicy(POLICIES.terms)} className="hover:text-white transition-colors">服務條款</button>
             <button onClick={() => setActivePolicy(POLICIES.disclaimer)} className="hover:text-white transition-colors">免責聲明</button>
           </div>
-        </motion.div>
-
-        {/* Footer Disclaimer */}
-        <motion.div variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mt-8 pt-8 border-t border-white border-opacity-10">
-          <p className="text-gray-400 text-xs leading-relaxed">
-            本網站所有內容的著作權等智慧財產權，均為邑沅有限公司所有。本網站內容僅供參考，若有任何疑問，請直接與我們聯絡。
-          </p>
         </motion.div>
       </div>
 
