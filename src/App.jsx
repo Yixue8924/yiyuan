@@ -9,6 +9,7 @@ import ProjectsSection from './components/ProjectsSection'
 import PartnersSection from './components/PartnersSection'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
+import CookieConsent from './components/CookieConsent'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <PartnersSection />
       <Footer />
       <BackToTop />
+      <CookieConsent />
     </div>
   )
 }
