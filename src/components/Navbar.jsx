@@ -55,9 +55,12 @@ export default function Navbar() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="hidden md:block"
           >
-            <button className="px-6 py-2 bg-forest-green text-white rounded-full hover:bg-forest-green/80 transition-all duration-300 font-medium text-sm shadow-lg hover:shadow-xl hover:scale-110">
+            <a 
+              href="#contact" 
+              className="px-6 py-2 bg-forest-green text-white rounded-full hover:bg-forest-green/80 transition-all duration-300 font-medium text-sm shadow-lg hover:shadow-xl hover:scale-110 inline-block"
+            >
               聯絡我們
-            </button>
+            </a>
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -88,9 +91,13 @@ export default function Navbar() {
                   {item.label}
                 </a>
               ))}
-              <button className="w-full px-6 py-2 bg-forest-green text-white rounded-full hover:bg-forest-green/80 transition-all font-medium hover:scale-105">
+              <a 
+                href="#contact"
+                className="w-full px-6 py-2 bg-forest-green text-white rounded-full hover:bg-forest-green/80 transition-all font-medium hover:scale-105 inline-block text-center"
+                onClick={() => setIsOpen(false)} // Close menu after clicking
+              >
                 聯絡我們
-              </button>
+              </a>
             </div>
           </motion.div>
         )}
