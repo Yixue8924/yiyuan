@@ -51,7 +51,7 @@ export default function AboutSection() {
   ]
 
   return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-mint-green">
+    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-mint-green scroll-mt-20">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -99,15 +99,22 @@ export default function AboutSection() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300"
+                className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 flex flex-col"
               >
-                <div className={`${value.color} mb-4`}>
-                  <IconComponent size={40} />
+                {/* Icon Container - 手機版居中 */}
+                <div className="flex justify-center md:justify-start mb-4">
+                  <div className={value.color}>
+                    <IconComponent size={40} />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-forest-green mb-3">
+
+                {/* Title - 手機版居中 */}
+                <h3 className="text-xl font-bold text-forest-green mb-3 text-center md:text-left">
                   {value.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+
+                {/* Description - 始終靠左 */}
+                <p className="text-gray-600 leading-relaxed text-left">
                   {value.description}
                 </p>
               </motion.div>
@@ -123,18 +130,16 @@ export default function AboutSection() {
           viewport={{ once: true }}
           className="grid md:grid-cols-3 gap-8 mt-16"
         >
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-2xl transition-all duration-300">
-            <div className="text-4xl font-bold text-forest-green mb-2">500+</div>
-            <p className="text-gray-600">服務過的機構與學校</p>
-          </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-2xl transition-all duration-300">
-            <div className="text-4xl font-bold text-ocean-blue mb-2">10,000+</div>
-            <p className="text-gray-600">受益的學生與社區成員</p>
-          </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-2xl transition-all duration-300">
-            <div className="text-4xl font-bold text-amber-600 mb-2">15+</div>
-            <p className="text-gray-600">年環境教育經驗</p>
-          </div>
+          {[
+            { label: '服務過的機構與學校', value: '500+', color: 'text-forest-green' },
+            { label: '受益的學生與社區成員', value: '10,000+', color: 'text-ocean-blue' },
+            { label: '年環境教育經驗', value: '15+', color: 'text-amber-600' }
+          ].map((stat, i) => (
+            <div key={i} className="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-2xl transition-all duration-300">
+              <div className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
+              <p className="text-gray-600">{stat.label}</p>
+            </div>
+          ))}
         </motion.div>
       </div>
     </section>
