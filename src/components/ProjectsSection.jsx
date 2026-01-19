@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
 
 export default function ProjectsSection() {
@@ -49,7 +49,7 @@ export default function ProjectsSection() {
     {
       id: 6,
       year: '113年',
-      title: '臺美環境教育合作與交流暨亞太中心營運專案工作計畫（113-114年）',
+      title: '臺美環境教育合作與交流暨亞太中心營運專案工作計畫',
       description: '與美國合作進行環境教育交流與合作，營運亞太環境教育中心',
       status: '已完成',
       details: ['國際合作', '環境教育', '中心營運'],
@@ -77,114 +77,128 @@ export default function ProjectsSection() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
         delayChildren: 0.2,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -50 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      x: 0,
-      transition: { duration: 0.6 },
+      y: 0,
+      transition: { duration: 0.5 },
     },
   }
 
+  // Determine which projects to display
+  const displayedProjects = showAllProjects ? projects : projects.slice(0, 3);
+
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-mint-green">
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 bg-mint-green/30">
+      <div className="max-w-5xl mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-forest-green mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-forest-green mb-6">
             相關執行實績
           </h2>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            多年來與政府與機構攜手，為環保與教育做出貢獻
+          <div className="w-24 h-1.5 bg-forest-green mx-auto mb-8 rounded-full"></div>
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            多年來與政府與機構攜手，深耕環保與環境教育領域
           </p>
         </motion.div>
 
-        {/* Timeline */}
+        {/* Timeline List */}
         <motion.div
           variants={timelineVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="space-y-8"
+          className="space-y-6"
         >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              className={`relative ${(showAllProjects || index < 3) ? 'block' : 'hidden'}`}
-            >
-              <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-forest-green hover:shadow-lg transition-all duration-300">
-                {/* Top Row */}
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="inline-block px-4 py-2 bg-forest-green text-white rounded-full text-sm font-semibold">
-                        {project.year}
-                      </span>
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                        project.status === '進行中'
-                          ? 'bg-blue-100 text-ocean-blue'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {project.status}
-                      </span>
+          <AnimatePresence mode='popLayout'>
+            {displayedProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                layout
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="group"
+              >
+                <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl p-6 md:p-10 border border-gray-100 transition-all duration-500 relative overflow-hidden">
+                  {/* Subtle Background Accent */}
+                  <div className="absolute top-0 left-0 w-2 h-full bg-forest-green opacity-80" />
+
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-3 mb-4">
+                        <span className="inline-flex px-4 py-1.5 bg-forest-green text-white rounded-full text-sm font-bold tracking-wide">
+                          {project.year}
+                        </span>
+                        <span className="inline-flex px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider">
+                          {project.status}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 group-hover:text-forest-green transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {project.details.map((detail, idx) => (
+                          <span
+                            key={idx}
+                            className="px-4 py-1.5 bg-mint-green/40 text-forest-green rounded-lg text-sm font-semibold"
+                          >
+                            {detail}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-forest-green">
-                      {project.title}
-                    </h3>
+                    
+                    <div className="hidden md:block">
+                      <CheckCircle className="text-forest-green/20 group-hover:text-forest-green transition-colors duration-500" size={48} strokeWidth={1.5} />
+                    </div>
                   </div>
-                  <CheckCircle className="text-forest-green flex-shrink-0" size={28} />
                 </div>
-
-                {/* Description */}
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* Details */}
-                <div className="flex flex-wrap gap-2">
-                  {project.details.map((detail, idx) => (
-                    <span
-                      key={idx}
-                      className="px-4 py-2 bg-mint-green text-forest-green rounded-full text-sm font-medium"
-                    >
-                      {detail}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
 
-        {/* Call to Action */}
+        {/* Call to Action & Toggle */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="mt-16 text-center"
+          className="mt-20 text-center"
         >
-          <p className="text-gray-700 mb-6 text-lg">
-            想了解我們過去的案例與成果？
-          </p>
           <button 
             onClick={() => setShowAllProjects(!showAllProjects)}
-            className="px-8 py-4 bg-forest-green text-white rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 font-medium text-lg"
+            aria-expanded={showAllProjects}
+            className="px-10 py-4 bg-forest-green text-white rounded-full hover:shadow-2xl hover:bg-forest-green/90 hover:-translate-y-1 transition-all duration-300 font-bold text-lg inline-flex items-center gap-3"
           >
             {showAllProjects ? '收起案例集' : '查看完整案例集'}
+            <motion.span
+              animate={{ rotate: showAllProjects ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              ↓
+            </motion.span>
           </button>
         </motion.div>
       </div>
